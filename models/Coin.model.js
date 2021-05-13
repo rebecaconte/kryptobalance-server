@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 
-let UserSchema = new Schema({
+let UserSchema = new Schema(
+  {
   name: {
     type: String,
     required: true,
@@ -8,9 +9,12 @@ let UserSchema = new Schema({
   },
   purchaseDate: Date,
   amount: Decimal128,
-  user: ObjectId,
-  timestamps
-})
+  user: ObjectId
+  },
+  {
+    timestamps: true,
+  }
+);
 
 let UserModel = model('user', UserSchema)
 

@@ -39,9 +39,6 @@ app.use(session({
 
 
 
-
-
-
 // 👇 Start handling routes here
 // Contrary to the views version, all routes are controled from the routes/index.js
 const allRoutes = require('./routes');
@@ -49,6 +46,9 @@ app.use('/api', allRoutes);
 
 const appRoutes = require('./routes/app.routes');
 app.use('/api', appRoutes);
+
+const authRoutes = require('./routes/auth.routes');
+app.use('/api', authRoutes);
 
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
