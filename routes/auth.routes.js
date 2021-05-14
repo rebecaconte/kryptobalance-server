@@ -26,13 +26,13 @@ router.post('/signup', (req, res) => {
   }
 
   //requirements of the password
-  const myPassRegex = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/);
+  /* const myPassRegex = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/);
   if (!myPassRegex.test(password)) {
     res.status(500).json({
       errorMessage: 'Password requires 8 characters, a number and an Uppercase alphabet'
     });
     return;
-  }
+  }*/
 
   //encrypt password
   let salt = bcrypt.genSaltSync(10);
@@ -53,6 +53,7 @@ router.post('/signup', (req, res) => {
         })
       }
       else {
+        console.log(err);
         res.status(500).json({
           errorMessage: 'Something went wrong! Please try again!',
           message: err,
