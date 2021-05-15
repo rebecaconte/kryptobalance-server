@@ -43,7 +43,7 @@ module.exports = {
   // Get coin purchase history from database to show on coin graph
   getCoinPurchaseHistory: async (req, res, next) => {
 
-    // NOTE: RETRIEVE COINS BY USER WHICH IS BEING RETRIEVED THROUGH SESSION!
+    // TODO: RETRIEVE COINS BY USER WHICH IS BEING RETRIEVED THROUGH SESSION!
 
     CoinModel.find()
        .then((coins) => {
@@ -58,8 +58,9 @@ module.exports = {
        })
   },
   // Save coin purchase history
-  postNewCoin: async (req, res, next) => {
-    const {name, amount, user} = req.body;
+  postNewCoinPurchase: async (req, res, next) => {
+
+    const {name, amountInvested, currencyUsed, user} = req.body;
     let purchaseDate = req.body.purchaseDate;
 
     // Fetching price of coin by date
@@ -72,7 +73,7 @@ module.exports = {
 
       purchaseDate = Moment(purchaseDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
       // Creating coin purchase based on price of date from api
-      CoinModel.create({ name, purchaseDate, amount, price, user })
+      CoinModel.create({ name, purchaseDate, amountInvested, currencyUsed, price, user })
         .then((response) => {
            res.status(200).json(response)
         })

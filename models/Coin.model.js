@@ -11,16 +11,16 @@ const coinSchema = new Schema(
       type: Date,
       required: true
     },
-    amount: {
+    amountInvested: {
       type: Number,
+      required: true
+    },
+    currencyUsed: {
+      type: String,
       required: true
     },
     price: {
       type: Object,
-      required: true
-    },
-    user: {
-      type: ObjectId,
       required: true
     }
   },
