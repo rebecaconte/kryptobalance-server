@@ -1,4 +1,4 @@
-const { Schema, model, Decimal128, ObjectId, timestamps } = require("mongoose");
+const { Schema, model, ObjectId, timestamps } = require("mongoose");
 
 // TODO: Please make sure you edit the user model to whatever makes sense in this case
 const coinSchema = new Schema(

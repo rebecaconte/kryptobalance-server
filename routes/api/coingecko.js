@@ -43,7 +43,7 @@ module.exports = {
   // Get coin purchase history from database to show on coin graph
   getCoinPurchaseHistory: async (req, res, next) => {
 
-    // TODO: RETRIEVE COINS BY USER WHICH IS BEING RETRIEVED THROUGH SESSION!
+    // NOTE: RETRIEVE COINS BY USER WHICH IS BEING RETRIEVED THROUGH SESSION!
 
     CoinModel.find()
        .then((coins) => {
