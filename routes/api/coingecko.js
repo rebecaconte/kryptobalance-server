@@ -57,6 +57,32 @@ module.exports = {
           })
        })
   },
+
+  // get growth of investment at HomePage
+  getCoinGrowth: async (req, res, next) => {
+    const {coinId, date, currency} = req.params
+    let dateOfPurchase = date.split('-')
+    dateOfPurchase = Moment([dateOfPurchase[2], dateOfPurchase[1] - 1, dateOfPurchase[0]]);
+    const dateNow = Moment();
+    const days = dateNow.diff(dateOfPurchase, 'days');
+    
+    let data = null;
+    try {
+      data = await CoinGeckoClient.coins.fetchMarketChart(coinId, {
+        days: days,
+        vs_currency: currency
+      });
+    } catch(e) {
+      console.log("Error calling getCoinGrowdth: ", e)
+      res.status(500).send(e);
+    }
+    res.status(200).send({
+      data: data
+    });
+  },
+
+
+
   // Save coin purchase history
   postNewCoinPurchase: async (req, res, next) => {
 
