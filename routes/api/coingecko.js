@@ -1,15 +1,15 @@
 const CoinGecko = require('coingecko-api'),
-      CoinGeckoClient = new CoinGecko(),
-      CoinModel = require('../../models/Coin.model'),
-      Moment = require('moment');
+  CoinGeckoClient = new CoinGecko(),
+  CoinModel = require('../../models/Coin.model'),
+  Moment = require('moment');
 
 module.exports = {
   // Get all coins information
   getCoinList: async (req, res, next) => {
     let data = null
     try {
-        data = await CoinGeckoClient.coins.list()
-    } catch(e) {
+      data = await CoinGeckoClient.coins.list()
+    } catch (e) {
       console.log("Error calling getCoinList: ", e)
       res.status(500).send(e);
     }
@@ -19,7 +19,7 @@ module.exports = {
     })
   },
   getCoinInfo: async (req, res, next) => {
-    const {coinId} = req.params
+    const { coinId } = req.params
 
     let data = null;
     try {
@@ -31,7 +31,7 @@ module.exports = {
         localization: false,
         sparkline: false
       });
-    } catch(e) {
+    } catch (e) {
       console.log("Error calling getCoinInfo: ", e)
       res.status(500).send(e);
     }
@@ -46,33 +46,33 @@ module.exports = {
     // TODO: RETRIEVE COINS BY USER WHICH IS BEING RETRIEVED THROUGH SESSION!
 
     CoinModel.find()
-       .then((coins) => {
-         console.log(coins);
-          res.status(200).json(coins)
-       })
-       .catch((err) => {
-          res.status(500).json({
-             error: 'Could not retrieve coin purchase history',
-             message: err
-          })
-       })
+      .then((coins) => {
+        console.log(coins);
+        res.status(200).json(coins)
+      })
+      .catch((err) => {
+        res.status(500).json({
+          error: 'Could not retrieve coin purchase history',
+          message: err
+        })
+      })
   },
 
   // get growth of investment at HomePage
   getCoinGrowth: async (req, res, next) => {
-    const {coinId, date, currency} = req.params
+    const { coinId, date, currency } = req.params
     let dateOfPurchase = date.split('-')
     dateOfPurchase = Moment([dateOfPurchase[2], dateOfPurchase[1] - 1, dateOfPurchase[0]]);
     const dateNow = Moment();
     const days = dateNow.diff(dateOfPurchase, 'days');
-    
+
     let data = null;
     try {
       data = await CoinGeckoClient.coins.fetchMarketChart(coinId, {
         days: days,
         vs_currency: currency
       });
-    } catch(e) {
+    } catch (e) {
       console.log("Error calling getCoinGrowdth: ", e)
       res.status(500).send(e);
     }
@@ -86,7 +86,7 @@ module.exports = {
   // Save coin purchase history
   postNewCoinPurchase: async (req, res, next) => {
 
-    const {name, amountInvested, currencyUsed, user} = req.body;
+    const { name, amountInvested, currencyUsed, user } = req.body;
     let purchaseDate = req.body.purchaseDate;
 
     // Fetching price of coin by date
@@ -96,20 +96,23 @@ module.exports = {
         localization: true
       });
       const price = coin.data.market_data.current_price
+      const image = coin.data.image.thumb
+      const symbol = coin.data.symbol
+
 
       purchaseDate = Moment(purchaseDate, 'DD-MM-YYYY').format('YYYY-MM-DD')
       // Creating coin purchase based on price of date from api
-      CoinModel.create({ name, purchaseDate, amountInvested, currencyUsed, price, user })
+      CoinModel.create({ name, purchaseDate, amountInvested, currencyUsed, price, symbol, image })
         .then((response) => {
-           res.status(200).json(response)
+          res.status(200).json(response)
         })
         .catch((err) => {
-           res.status(500).json({
-              error: 'Something went wrong during adding a coin purchase date',
-              message: err
-           })
+          res.status(500).json({
+            error: 'Something went wrong during adding a coin purchase date',
+            message: err
+          })
         })
-    } catch(e) {
+    } catch (e) {
       console.log("Error getting price for date of coin purchase: ", e)
       res.status(500).send(e);
     }

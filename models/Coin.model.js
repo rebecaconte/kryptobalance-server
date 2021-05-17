@@ -22,6 +22,14 @@ const coinSchema = new Schema(
     price: {
       type: Object,
       required: true
+    },
+    symbol: {
+      type: String,
+      required: true
+    },
+    image: {
+      type: String,
+      required: true
     }
   },
   {

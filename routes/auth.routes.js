@@ -7,6 +7,7 @@ const UserModel = require('../models/User.model');
 router.post('/signup', (req, res) => {
   const { username, email, password } = req.body;
 
+
   //user needs to insert info to have access
   if (!username || !email || !password) {
     res.status(500)
@@ -60,26 +61,26 @@ router.post('/signup', (req, res) => {
         })
       }
     });
-  })
+})
 
-  router.post('/signin', (req, res) => {
-    const { email, password } = req.body;
+router.post('/signin', (req, res) => {
+  const { email, password } = req.body;
 
-    //user needs to insert info to have access
-    if (!email || !password) {
-      res.status(500).json({
-        error: 'Please enter Username. email and password',
-      })
-      return;
-    }
-    //email needs a valid format
-    const myRegex = new RegExp(/^[a-z0-9](?!.*?[^\na-z0-9]{2})[^\s@]+@[^\s@]+\.[^\s@]+[a-z0-9]$/);
-    if (!myRegex.test(email)) {
-      res.status(500).json({
-        error: 'Email format seems not to be correct',
-      })
-      return;
-    }
+  //user needs to insert info to have access
+  if (!email || !password) {
+    res.status(500).json({
+      error: 'Please enter Username. email and password',
+    })
+    return;
+  }
+  //email needs a valid format
+  const myRegex = new RegExp(/^[a-z0-9](?!.*?[^\na-z0-9]{2})[^\s@]+@[^\s@]+\.[^\s@]+[a-z0-9]$/);
+  if (!myRegex.test(email)) {
+    res.status(500).json({
+      error: 'Email format seems not to be correct',
+    })
+    return;
+  }
 
 
   //check if user already exists on the DB
@@ -130,33 +131,15 @@ const isLoggedIn = (req, res, next) => {
   };
 };
 
-
-//auth routes
-router.get("/dashboard", isLoggedIn, (req, res, next) => {
-  res.status(200).json(req.session.loggedInUser);
-});
-
-router.get("/profile", isLoggedIn, (req, res, next) => {
-  res.status(200).json(req.session.loggedInUser);
-});
-
-router.get("/:coinId", isLoggedIn, (req, res, next) => {
-  res.status(200).json(req.session.loggedInUser);
-});
-
-router.post("/addcoin", isLoggedIn, (req, res, next) => {
-  res.status(200).json(req.session.loggedInUser);
-});
-
-router.post("/editcoin", isLoggedIn, (req, res, next) => {
-  res.status(200).json(req.session.loggedInUser);
-});
-
 //logout route
 router.post("/logout", (req, res) => {
   req.session.destroy();
   res.status(204).json({});
 })
 
+//check if user is loggedin
+router.get("/user", isLoggedIn, (req, res, next) => {
+  res.status(200).json(req.session.loggedInUser);
+});
 
 module.exports = router;
