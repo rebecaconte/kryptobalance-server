@@ -5,13 +5,11 @@ const bcrypt = require('bcryptjs');
 const UserModel = require('../models/User.model');
 
 router.post('/signup', (req, res) => {
-  const { username, email, password } = req.body;
-
+  const { email, username, password } = req.body;
 
   //user needs to insert info to have access
   if (!username || !email || !password) {
-    res.status(500)
-      .json({
+    res.status(500).json({
         errorMessage: 'Please enter username, email and password'
       });
     return;
@@ -38,10 +36,12 @@ router.post('/signup', (req, res) => {
   //encrypt password
   let salt = bcrypt.genSaltSync(10);
   let hash = bcrypt.hashSync(password, salt);
+
   UserModel.create({ name: username, email, passwordHash: hash })
     .then((user) => {
       user.passwordHash = "***";
       console.log(user);
+      req.session.loggedInUser = user;
       res.status(200).json(user);
     })
     .catch((err) => {
@@ -130,6 +130,7 @@ const isLoggedIn = (req, res, next) => {
     })
   };
 };
+
 
 //logout route
 router.post("/logout", (req, res) => {
