@@ -1,17 +1,46 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, ObjectId, timestamps } = require("mongoose");
 
-let UserSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true
+// TODO: Please make sure you edit the user model to whatever makes sense in this case
+const coinSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true
+    },
+    purchaseDate: {
+      type: Date,
+      required: true
+    },
+    amountInvested: {
+      type: Number,
+      required: true
+    },
+    currencyUsed: {
+      type: String,
+      required: true
+    },
+    price: {
+      type: Object,
+      required: true
+    },
+    symbol: {
+      type: String,
+      required: true
+    },
+    image: {
+      type: String,
+      required: true
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+    }
   },
-  purchaseDate: Date,
-  amount: Decimal128,
-  user: ObjectId,
-  timestamps
-})
+  {
+    timestamps
+  }
+);
 
-let UserModel = model('user', UserSchema)
+const Coin = model("Coin", coinSchema);
 
-module.exports = UserModel
+module.exports = Coin;
