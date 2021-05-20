@@ -24,15 +24,6 @@ router.post('/signup', (req, res) => {
     return;
   }
 
-  //requirements of the password
-  /* const myPassRegex = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/);
-  if (!myPassRegex.test(password)) {
-    res.status(500).json({
-      errorMessage: 'Password requires 8 characters, a number and an Uppercase alphabet'
-    });
-    return;
-  }*/
-
   //encrypt password
   let salt = bcrypt.genSaltSync(10);
   let hash = bcrypt.hashSync(password, salt);
@@ -49,7 +40,7 @@ router.post('/signup', (req, res) => {
       if (err.code === 11000) {
 
         res.status(500).json({
-          erroMessage: 'username or email entered is already taken! Please insert another one',
+          errorMessage: 'username or email entered is already taken! Please insert another one',
           message: err,
         })
       }
@@ -69,7 +60,7 @@ router.post('/signin', (req, res) => {
   //user needs to insert info to have access
   if (!email || !password) {
     res.status(500).json({
-      error: 'Please enter Username. email and password',
+      errorMessage: 'Please enter email and password',
     })
     return;
   }
@@ -77,7 +68,7 @@ router.post('/signin', (req, res) => {
   const myRegex = new RegExp(/^[a-z0-9](?!.*?[^\na-z0-9]{2})[^\s@]+@[^\s@]+\.[^\s@]+[a-z0-9]$/);
   if (!myRegex.test(email)) {
     res.status(500).json({
-      error: 'Email format seems not to be correct',
+      errorMessage: 'Email format seems not to be correct',
     })
     return;
   }
@@ -130,7 +121,6 @@ const isLoggedIn = (req, res, next) => {
     })
   };
 };
-
 
 //logout route
 router.post("/logout", (req, res) => {
