@@ -9,6 +9,7 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.25.1",
     "coingecko-api": "^1.0.10",
     "connect-mongo": "^4.4.1",
     "cookie-parser": "^1.4.5",
